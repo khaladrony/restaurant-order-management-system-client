@@ -1,0 +1,16 @@
+<div class="attachment-modal">
+  <div class="modal-header" style="height: 15px">
+    <h5 class="modal-title pull-left">{{title}}</h5>
+  </div>
+  <div class="modal-body">
+    {{message}}
+  </div>
+  <div class="modal-footer p-0">
+    <ng-container>
+      <button type="button" class="btn btn-sm btn-success w-25"
+              (click)="respond('yes')">Yes
+      </button>
+      <button type="button" class="btn btn-sm btn-danger w-25" (click)="respond('no')">No</button>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">{{title}}</h3>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="dishForm">
+                        <div class="pl-lg-4">
+
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="dishName"> Dish Name</label>
+                                        <input type="text" id="dishName" name="dishName" formControlName="dishName"
+                                            class="form-control form-control-alternative" placeholder="" value="">
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="dishForm['controls']['dishName'].errors?.['required'] && dishForm['controls']['dishName'].touched">
+                                            *Dish name is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="foodCategory">Food Category</label>
+                                        <select formControlName="foodCategory" class="form-control">
+                                            <option>Select Food Category</option>
+                                            <option *ngFor="let category of foodCategoryList">{{category}}</option>
+                                        </select>
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="dishForm['controls']['foodCategory'].errors?.['required'] && dishForm['controls']['foodCategory'].touched">
+                                            *Food Category is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Status</label>
+
+                                        <div class="custom-control custom-radio mb-3">
+                                            <input class="custom-control-input" id="active" formControlName="status"
+                                                type="radio" value="Active">
+                                            <label class="custom-control-label" for="active">Active</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" id="inactive" formControlName="status"
+                                                type="radio" value="Inactive">
+                                            <label class="custom-control-label" for="inactive">Inactive</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="pl-lg-4">                            
+                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success" (click)="submit()">Save</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning" (click)="updateSelectedRow()">Update</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-danger float-right ml-2"
+                                (click)="delete()">Delete</button>
+                            <button type="button" class="btn btn-primary float-right"
+                                (click)="resetForm()">Reset</button>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Dish list</h3>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Dish</th>
+                                <th scope="col">Food Category</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="dishes?.length != 0">
+                            <tr *ngFor="let dish of dishes; let i = index" style="cursor:pointer"
+                                (click)="onSelectRow(dish, i)" [ngClass]="{'selectedRow' : i == selectedRowIndex}">
+                                <td>{{dish.dishName}}</td>
+                                <td>{{dish.foodCategory}}</td>
+                                <td class="align-middle text-left text-sm">
+                                    <span
+                                        [ngClass]="dish.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{dish.status}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

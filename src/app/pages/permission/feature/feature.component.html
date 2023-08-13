@@ -1,0 +1,143 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">{{title}}</h3>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="featureForm">
+                        <div class="pl-lg-4">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="featureName">Feature Name</label>
+                                        <input type="text" id="featureName" name="featureName"
+                                            formControlName="featureName" class="form-control form-control-alternative"
+                                            placeholder="" value="">
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="featureForm['controls']['featureName'].errors?.['required'] && featureForm['controls']['featureName'].touched">
+                                            *Feature name is required.</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="path">Path</label>
+                                        <input type="text" id="path" name="path" formControlName="path"
+                                            class="form-control form-control-alternative" placeholder="" value="">
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="featureForm['controls']['path'].errors?.['required'] && featureForm['controls']['path'].touched">
+                                            *Path is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="parentFeature">Parent Features</label>
+                                        <select formControlName="parentFeature" class="form-control">
+                                            <option>Select Parent Feature</option>
+                                            <option *ngFor="let feature of featureList">{{feature}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="featureIcon">Feature Icon</label>
+                                        <input type="text" id="featureIcon" name="featureIcon"
+                                            formControlName="featureIcon" class="form-control form-control-alternative"
+                                            placeholder="ex:ni-basket text-info" value="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Status</label>
+
+                                        <div class="custom-control custom-radio mb-3">
+                                            <input class="custom-control-input" id="active" formControlName="status"
+                                                type="radio" value="Active">
+                                            <label class="custom-control-label" for="active">Active</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" id="inactive" formControlName="status"
+                                                type="radio" value="Inactive">
+                                            <label class="custom-control-label" for="inactive">Inactive</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pl-lg-4">
+                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success"
+                                (click)="submit()">Save</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning"
+                                (click)="updateSelectedRow()">Update</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-danger float-right ml-2"
+                                (click)="delete()">Delete</button>
+                            <button type="button" class="btn btn-primary float-right"
+                                (click)="resetForm()">Reset</button>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Feature list</h3>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Feature Name</th>
+                                <th scope="col">Path</th>
+                                <th scope="col">Parent Feature</th>
+                                <th scope="col">Feature Icon</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="features?.length != 0">
+                            <tr *ngFor="let feature of features; let i = index" style="cursor:pointer"
+                                (click)="onSelectRow(feature, i)" [ngClass]="{'selectedRow' : i == selectedRowIndex}">
+                                <td>{{feature.featureName}}</td>
+                                <td>{{feature.path}}</td>
+                                <td>{{feature.parentFeature}}</td>
+                                <td>{{feature.featureIcon}}</td>
+                                <td class="align-middle text-left text-sm">
+                                    <span
+                                        [ngClass]="feature.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{feature.status}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,125 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">{{title}}</h3>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="featureMappingForm">
+                        <div class="pl-lg-4">
+
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="role">Roles</label>
+                                        <select formControlName="role" class="form-control">
+                                            <option>Select Role</option>
+                                            <option *ngFor="let role of roleList">{{role}}</option>
+                                        </select>
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="featureMappingForm['controls']['role'].errors?.['required'] && featureMappingForm['controls']['role'].touched">
+                                            *Role is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="feature"> Features</label>
+                                        <select formControlName="role" class="form-control">
+                                            <option>Select Feature</option>
+                                            <option *ngFor="let feature of featureList">{{feature}}</option>
+                                        </select>
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="featureMappingForm['controls']['feature'].errors?.['required'] && featureMappingForm['controls']['feature'].touched">
+                                            *Feature is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Status</label>
+
+                                        <div class="custom-control custom-radio mb-3">
+                                            <input class="custom-control-input" id="active" formControlName="status"
+                                                type="radio" value="Active">
+                                            <label class="custom-control-label" for="active">Active</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" id="inactive" formControlName="status"
+                                                type="radio" value="Inactive">
+                                            <label class="custom-control-label" for="inactive">Inactive</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="pl-lg-4">
+                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success"
+                                (click)="submit()">Save</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning"
+                                (click)="updateSelectedRow()">Update</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-danger float-right ml-2"
+                                (click)="delete()">Delete</button>
+                            <button type="button" class="btn btn-primary float-right"
+                                (click)="resetForm()">Reset</button>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Feature Mapping list</h3>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Role Name</th>
+                                <th scope="col">Feature Name</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="featureMaps?.length != 0">
+                            <tr *ngFor="let featureMap of featureMaps; let i = index" style="cursor:pointer"
+                                (click)="onSelectRow(featureMap, i)"
+                                [ngClass]="{'selectedRow' : i == selectedRowIndex}">
+                                <td>{{featureMap.role}}</td>
+                                <td>{{featureMap.feature}}</td>
+                                <td class="align-middle text-left text-sm">
+                                    <span
+                                        [ngClass]="featureMap.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{featureMap.status}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

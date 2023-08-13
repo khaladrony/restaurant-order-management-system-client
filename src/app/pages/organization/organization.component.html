@@ -1,0 +1,148 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Create Organization</h3>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="organizationForm">
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="username">Organization name</label>
+                                        <input type="text" id="organizationName" name="organizationName"
+                                            formControlName="organizationName"
+                                            class="form-control form-control-alternative"
+                                            placeholder="Organization name" value="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="email">Email address</label>
+                                        <input type="email" id="email" name="email" formControlName="email"
+                                            class="form-control form-control-alternative"
+                                            placeholder="jesse@example.com">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="address">Address</label>
+                                        <input id="address" name="address" formControlName="address"
+                                            class="form-control form-control-alternative" placeholder="Address" value=""
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="phoneNo">Phone Number</label>
+                                        <input type="text" id="phoneNo" name="phoneNo" formControlName="phoneNo"
+                                            class="form-control form-control-alternative" placeholder="Phone Number"
+                                            value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="phoneNo">Web address</label>
+                                        <input type="text" id="webAddress" name="webAddress"
+                                            formControlName="webAddress" class="form-control form-control-alternative"
+                                            placeholder="Web address" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Status</label>
+
+                                        <div class="custom-control custom-radio mb-3">
+                                            <input class="custom-control-input" id="active" formControlName="status"
+                                                type="radio" value="Active">
+                                            <label class="custom-control-label" for="active">Active</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" id="inactive" formControlName="status"
+                                                type="radio" value="Inactive">
+                                            <label class="custom-control-label" for="inactive">Inactive</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pl-lg-4">
+                            <button type="button" class="btn btn-primary" (click)="submit()">Submit</button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Organization</h3>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Organization name</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Web address</th>
+                                <th scope="col">Phone no</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="organization">
+                            <tr>
+                                <td>{{organization.organizationName}}</td>
+                                <td>{{organization.address}}</td>
+                                <td>{{organization.email}}</td>
+                                <td>{{organization.webAddress}}</td>
+                                <td>{{organization.phoneNo}}</td>
+                                <td class="align-middle text-center text-sm">
+                                    <span [ngClass]="organization.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{organization.status}}</span>
+                                </td>
+
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" class="btn btn-success btn-icon btn-sm "
+                                        data-original-title="" title="">
+                                        <i class="ni ni-settings-gear-65 pt-1"></i>
+                                    </button>
+                                    <button type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm "
+                                        data-original-title="" title="">
+                                        <i class="ni ni-fat-remove pt-1"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

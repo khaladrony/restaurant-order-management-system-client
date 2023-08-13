@@ -1,0 +1,166 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Create Restaurant</h3>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="restaurantForm">
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="restaurantName">Restaurant name</label>
+                                        <input type="text" id="restaurantName" name="restaurantName"
+                                            formControlName="restaurantName"
+                                            class="form-control form-control-alternative" placeholder="" value="">
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="restaurantForm['controls']['restaurantName'].errors?.['required'] && restaurantForm['controls']['restaurantName'].touched">
+                                            *Username is required.</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="branchCode">Branch Code</label>
+                                        <input type="text" id="branchCode" name="branchCode"
+                                            formControlName="branchCode" class="form-control form-control-alternative"
+                                            placeholder="">
+
+                                            <div class="text-danger float-end"
+                                            *ngIf="restaurantForm['controls']['branchCode'].errors?.['required'] && restaurantForm['controls']['branchCode'].touched">
+                                            *Branch Code is required.</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="branchManager">Branch Manager</label>
+                                        <input type="text" id="branchManager" name="branchManager"
+                                            formControlName="branchManager"
+                                            class="form-control form-control-alternative" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="address">Address</label>
+                                        <input id="address" name="address" formControlName="address"
+                                            class="form-control form-control-alternative" placeholder="Address" value=""
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="phoneNo">Phone Number</label>
+                                        <input type="text" id="phoneNo" name="phoneNo" formControlName="phoneNo"
+                                            class="form-control form-control-alternative" placeholder="Phone Number"
+                                            value="">
+
+                                            <div class="text-danger float-end"
+                                            *ngIf="restaurantForm['controls']['phoneNo'].errors?.['required'] && restaurantForm['controls']['phoneNo'].touched">
+                                            *Phone Number is required.</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="webAddress">Web address</label>
+                                        <input type="text" id="webAddress" name="webAddress"
+                                            formControlName="webAddress" class="form-control form-control-alternative"
+                                            placeholder="Web address" value="">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Status</label>
+
+                                        <div class="custom-control custom-radio mb-3">
+                                            <input class="custom-control-input" id="active" formControlName="status"
+                                                type="radio" value="Active">
+                                            <label class="custom-control-label" for="active">Active</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" id="inactive" formControlName="status"
+                                                type="radio" value="Inactive">
+                                            <label class="custom-control-label" for="inactive">Inactive</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pl-lg-4">                            
+                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success" (click)="submit()">Save</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning" (click)="updateSelectedRow()">Update</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-danger float-right ml-2"
+                                (click)="delete()">Delete</button>
+                            <button type="button" class="btn btn-primary float-right"
+                                (click)="resetForm()">Reset</button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Restaurant List</h3>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Restaurant name</th>
+                                <th scope="col">Branch Code</th>
+                                <th scope="col">Branch Manager</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Phone no</th>
+                                <th scope="col">Web address</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="restaurants?.length != 0">
+                            <tr *ngFor="let restaurant of restaurants; let i = index" style="cursor:pointer"
+                                (click)="onSelectRow(restaurant, i)"
+                                [ngClass]="{'selectedRow' : i == selectedRowIndex}">
+                                <td>{{restaurant.restaurantName}}</td>
+                                <td>{{restaurant.branchCode}}</td>
+                                <td>{{restaurant.branchManager}}</td>
+                                <td>{{restaurant.address}}</td>
+                                <td>{{restaurant.phoneNo}}</td>
+                                <td>{{restaurant.webAddress}}</td>
+
+                                <td class="align-middle text-center text-sm">
+                                    <span
+                                        [ngClass]="restaurant.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{restaurant.status}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
