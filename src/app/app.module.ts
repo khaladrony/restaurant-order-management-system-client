@@ -19,6 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotifierModule } from 'angular-notifier';
 import { CustomerOrderLayoutComponent } from './layouts/customer-order-layout/customer-order-layout.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { CustomerOrderLayoutComponent } from './layouts/customer-order-layout/cu
     AppRoutingModule,
     ToastrModule.forRoot(),
     NgxSpinnerModule,
+    NgSelectModule,
     NotifierModule.withConfig({
       position: {
         horizontal: {
@@ -56,7 +58,7 @@ import { CustomerOrderLayoutComponent } from './layouts/customer-order-layout/cu
     AdminLayoutComponent,
     AuthLayoutComponent,
     CustomerOrderLayoutComponent,
-    NotFoundComponent,
+    NotFoundComponent    
   ],
   providers: [
     {

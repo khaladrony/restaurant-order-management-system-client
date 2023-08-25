@@ -9,7 +9,9 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-    { path: '', component: LoginComponent },
+    // { path: '', component: LoginComponent },
+    {   path: '', 
+        loadChildren: () => import('src/app/layouts/auth-layout/auth-layout.module').then(m => m.AuthLayoutModule) },
     {path: '/admin', component: DashboardComponent }, 
     {path: '/admin/dashboard', component: DashboardComponent }, 
     {

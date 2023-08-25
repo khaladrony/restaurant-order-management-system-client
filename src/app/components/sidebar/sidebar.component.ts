@@ -13,9 +13,9 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '/admin/user-profile', title: 'User profile', icon: 'ni-single-02 text-yellow',  type: 'submenu', isCollapsed: true,
     children: [
-      { path: '/admin/user-profile', title: 'User Create', type: 'link' },
-      { path: '/admin/role', title: 'Roles Create', type: 'link' },
-      { path: '/admin/feature', title: 'Features Create', type: 'link' },
+      { path: '/admin/user-profile', title: 'User', type: 'link' },
+      { path: '/admin/role', title: 'Roles', type: 'link' },
+      { path: '/admin/feature', title: 'Features', type: 'link' },
       { path: '/admin/feature-map', title: 'Features Mapping', type: 'link' }
     ]
   },
@@ -28,7 +28,7 @@ export const ROUTES: RouteInfo[] = [
 ];
 
 export const ALLROUTES: any[] = [
-  { path: '/admin/user-profile', title: 'User profile' },
+  { path: '/admin/user-profile', title: 'User' },
   { path: '/admin/role', title: 'Roles' },
   { path: '/admin/feature', title: 'Features' },
   { path: '/admin/feature-map', title: 'Features Mapping' },

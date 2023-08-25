@@ -30,7 +30,7 @@ export class FeatureComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.title = 'Feature Create';
+    this.title = 'Create Feature';
 
     this.featureForm = this.formBuilder.group({
       featureName: new FormControl('', Validators.required),

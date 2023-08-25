@@ -31,7 +31,7 @@ export class RoleFeatureMappingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.title = 'Feature Mapping Create';
+    this.title = 'Create Feature Mapping';
 
     this.featureMappingForm = this.formBuilder.group({
       role: new FormControl(null, Validators.required),

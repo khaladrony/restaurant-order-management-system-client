@@ -69,7 +69,33 @@
                                             rows="3"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="role">Roles</label>
+                                        <!-- <select formControlName="role" class="form-control">
+                                            <option>Select Role</option>
+                                            <option *ngFor="let role of roleList">{{role.name}}</option>
+                                        </select> -->
+
+                                        <!-- <ng-select class="col-md-4 w-100" placeholder="-Select Role-"
+                                            formControlName="role" id="role" (change)="onRoleChange($event)">
+                                            <ng-option *ngFor="let role of roleList" [value]="role.id">
+                                                {{role.name}}
+                                            </ng-option>
+
+                                        </ng-select> -->
+
+                                        <!-- <ng-select>
+
+                                        </ng-select> -->
+
+                                        <div class="text-danger float-end"
+                                            *ngIf="userProfileForm['controls']['role'].errors?.['required'] && userProfileForm['controls']['role'].touched">
+                                            *Role required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
                                     <div class="form-group">
                                         <label class="form-control-label">Status</label>
 
@@ -89,8 +115,10 @@
                         </div>
 
                         <div class="pl-lg-4">
-                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success" (click)="submit()">Save</button>
-                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning" (click)="updateSelectedRow()">Update</button>
+                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success"
+                                (click)="submit()">Save</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning"
+                                (click)="updateSelectedRow()">Update</button>
                             <button *ngIf="isUpdateMode" type="button" class="btn btn-danger float-right ml-2"
                                 (click)="deleteUser()">Delete</button>
                             <button type="button" class="btn btn-primary float-right"

@@ -2,7 +2,7 @@ export class Role {
     id: number;
     version: number;
 
-    rolesName: string;
+    name: string;
     status: string
 
     createdBy: number;
