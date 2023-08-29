@@ -46,7 +46,7 @@ export class RolesComponent implements OnInit {
         this.rolesForm = this.formBuilder.group({
             rolesName: new FormControl("", Validators.required),
             status: ["Active"],
-            roleId: new FormControl(""),
+            roleId: new FormControl("")
         });
 
         this.loadListData();
@@ -113,7 +113,7 @@ export class RolesComponent implements OnInit {
             });
         }
     }
-
+    
     delete() {
         this.roleId = this.rolesForm.value.roleId;
         this.confirmationModalService
@@ -145,6 +145,21 @@ export class RolesComponent implements OnInit {
             });
     }
 
+    onSelectRow(role: Role, index: number) {
+        this.isUpdateMode = true;
+
+        this.selectedRowIndex = index == this.selectedRowIndex ? -1 : index;
+
+        if (this.selectedRowIndex == -1) {
+            this.resetForm();
+            return;
+        }
+
+        this.rolesForm.controls["rolesName"].setValue(role.name);
+        this.rolesForm.controls["status"].setValue(role.status);
+        this.rolesForm.controls["roleId"].setValue(role.id);
+    }
+
     loadListData() {
         let data = {};
         this.loader.show();
@@ -160,21 +175,6 @@ export class RolesComponent implements OnInit {
                 this.loader.hide();
             },
         });
-    }
-
-    onSelectRow(role: Role, index: number) {
-        this.isUpdateMode = true;
-
-        this.selectedRowIndex = index == this.selectedRowIndex ? -1 : index;
-
-        if (this.selectedRowIndex == -1) {
-            this.resetForm();
-            return;
-        }
-
-        this.rolesForm.controls["rolesName"].setValue(role.name);
-        this.rolesForm.controls["status"].setValue(role.status);
-        this.rolesForm.controls["roleId"].setValue(role.id);
     }
 
     resetForm() {

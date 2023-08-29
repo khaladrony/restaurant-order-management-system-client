@@ -10,11 +10,15 @@ import { User } from '../models/user.model';
 })
 export class UserService {
 
+  API_FEATURE_NAME: String;
+
   constructor(
     private router: Router,
     private httpClient: HttpClient,
     private environment: EnvService
-  ) { }
+  ) {
+    this.API_FEATURE_NAME = '/users';
+   }
 
   create(user: User): Observable<any> {
     const token = sessionStorage.getItem("token");
@@ -25,7 +29,7 @@ export class UserService {
     const formData: FormData = new FormData();
     formData.append('userDTO', JSON.stringify(user));
 
-    return this.httpClient.post(`${this.environment.apiURL}/users/add`, formData, { headers: headers });
+    return this.httpClient.post(`${this.environment.apiURL}${this.API_FEATURE_NAME}/add`, formData, { headers: headers });
   }
 
 
@@ -36,9 +40,9 @@ export class UserService {
     });
 
     const formData: FormData = new FormData();
-    formData.append('roleDTO', JSON.stringify(user));
+    formData.append('userDTO', JSON.stringify(user));
 
-    return this.httpClient.put(`${this.environment.apiURL}/users/update`, formData, { headers: headers });
+    return this.httpClient.put(`${this.environment.apiURL}${this.API_FEATURE_NAME}/update`, formData, { headers: headers });
   }
 
 
@@ -51,7 +55,7 @@ export class UserService {
     let params = new HttpParams();
     params = params.append('id', id);
 
-    return this.httpClient.delete(`${this.environment.apiURL}/users/delete`, { headers, params });
+    return this.httpClient.delete(`${this.environment.apiURL}${this.API_FEATURE_NAME}/delete`, { headers, params });
   }
 
   getList(formData: any): Observable<any> {
@@ -60,6 +64,6 @@ export class UserService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.httpClient.post(`${this.environment.apiURL}/users/list`, formData, { headers: headers });
+    return this.httpClient.post(`${this.environment.apiURL}${this.API_FEATURE_NAME}/list`, formData, { headers: headers });
   }
 }

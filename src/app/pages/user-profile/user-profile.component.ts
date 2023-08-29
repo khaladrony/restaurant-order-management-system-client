@@ -29,7 +29,8 @@ export class UserProfileComponent implements OnInit {
     isUpdateMode = false;
     userProfileForm: UntypedFormGroup;
     roleList: Role[] = [];
-    selectedRole: any;
+    selectedRole: Role = new Role();
+    userId: number;
 
     constructor(
         private router: Router,
@@ -39,8 +40,9 @@ export class UserProfileComponent implements OnInit {
         private notifyService: NotificationService,
         private utilService: UtilService,
         private userService: UserService,
-        private roleService: RoleService
+        private roleService: RoleService,
     ) {
+        this.user = new User();
         this.selectedRowIndex = -1;
     }
 
@@ -53,6 +55,7 @@ export class UserProfileComponent implements OnInit {
             phoneNo: new FormControl(""),
             status: ["Active"],
             role: new FormControl(null, Validators.required),
+            userId: new FormControl("")
         });
 
         this.loadRoleList();
@@ -76,39 +79,86 @@ export class UserProfileComponent implements OnInit {
 
         if (this.userProfileForm.valid) {
             this.loader.show();
-      
+
             this.userService.create(this.user).subscribe({
-              next: (response) => {
-                console.log(response);
-                this.notifyService.showSuccess("success", response.message);
-      
-                this.router.navigate(["admin/user-profile"]);
-              },
-              complete: () => {
-                this.loadListData();
-                this.loader.hide();
-                this.resetForm();
-              },
-              error: (err) => {
-                console.log(err);
-                this.notifyService.showError("error", err.error?.message);
-                this.loader.hide();
-              },
+                next: (response) => {
+                    console.log(response);
+                    this.notifyService.showSuccess("success", response.message);
+
+                    this.router.navigate(["admin/user-profile"]);
+                },
+                complete: () => {
+                    this.loader.hide();
+                    this.resetForm();
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.notifyService.showError("error", err.error?.message);
+                    this.loader.hide();
+                },
             });
-          }
+        }
+    }
+
+    updateSelectedRow() {
+        this.user.id = this.userProfileForm.value.userId;
+        this.user.username = this.userProfileForm.value.username;
+        this.user.password = this.userProfileForm.value.password;
+        this.user.email = this.userProfileForm.value.email;
+        this.user.address = this.userProfileForm.value.address;
+        this.user.phoneNo = this.userProfileForm.value.phoneNo;
+        this.user.status = this.userProfileForm.value.status;
+        this.user.role = this.selectedRole;
+
+        if (this.userProfileForm.valid) {
+            this.loader.show();
+
+            this.userService.update(this.user).subscribe({
+                next: (response) => {
+                    console.log(response);
+                    this.notifyService.showSuccess("success", response.message);
+
+                    this.router.navigate(["admin/user-profile"]);
+                },
+                complete: () => {
+                    this.loader.hide();
+                    this.resetForm();
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.notifyService.showError("error", err.error?.message);
+                    this.loader.hide();
+                },
+            });
+        }
     }
 
     deleteUser() {
-        console.log("delete button pressed");
+        this.userId = this.userProfileForm.value.userId;
 
         this.confirmationModalService
             .confirm("Delete confirmation!", "Are you sure you want to delete?")
             .subscribe((answer) => {
                 if (answer === "yes") {
-                    this.notifyService.showError("Data deleted successfully!", "DELETED");
-                    // this.loader.hide();
+                    this.userService.delete(this.userId).subscribe({
+                        next: () => {
+                            this.notifyService.showSuccess(
+                                "success",
+                                "Deleted Successfully."
+                            );
+
+                            this.router.navigate(["admin/role"]);
+                        },
+                        complete: () => {
+                            this.loader.hide();
+                            this.resetForm();
+                        },
+                        error: (err) => {
+                            this.notifyService.showError("error", err.message);
+                            console.log(err);
+                        },
+                    });
                 } else {
-                    // this.loader.hide();
                     return;
                 }
             });
@@ -116,7 +166,6 @@ export class UserProfileComponent implements OnInit {
 
     onSelectRow(user: User, index: number) {
         this.isUpdateMode = true;
-
         this.selectedRowIndex = index == this.selectedRowIndex ? -1 : index;
 
         if (this.selectedRowIndex == -1) {
@@ -124,55 +173,40 @@ export class UserProfileComponent implements OnInit {
             return;
         }
 
+        this.userProfileForm.controls["userId"].setValue(user.id);
         this.userProfileForm.controls["username"].setValue(user.username);
         this.userProfileForm.controls["password"].setValue(user.password);
         this.userProfileForm.controls["email"].setValue(user.email);
         this.userProfileForm.controls["phoneNo"].setValue(user.phoneNo);
         this.userProfileForm.controls["address"].setValue(user.address);
         this.userProfileForm.controls["status"].setValue(user.status);
-    }
-
-    updateSelectedRow() {
-        this.user.username = this.userProfileForm.value.username;
-        this.user.password = this.userProfileForm.value.password;
-        this.user.email = this.userProfileForm.value.email;
-        this.user.address = this.userProfileForm.value.address;
-        this.user.phoneNo = this.userProfileForm.value.phoneNo;
-        this.user.status = this.userProfileForm.value.status;
-
-        console.log(this.user);
-
-        this.users.push(this.user);
-
-        console.info(this.users);
-
-        this.resetForm();
-
-        this.notifyService.showSuccess("User updated successfully!", "UPDATED");
+        this.userProfileForm.controls["role"].setValue(user.role.id);
+        this.selectedRole = user.role;
     }
 
     loadListData() {
         let data = {};
         this.loader.show();
         this.userService.getList(data).subscribe({
-          next: (data) => {
-            this.users = data.data;
-          },
-          complete: () => {
-            this.loader.hide();
-          },
-          error: (err) => {
-            console.log(err);
-            this.loader.hide();
-          },
+            next: (data) => {
+                this.users = data.data;
+            },
+            complete: () => {
+                this.loader.hide();
+            },
+            error: (err) => {
+                console.log(err);
+                this.loader.hide();
+            },
         });
-      }
+    }
 
     resetForm() {
         this.userProfileForm.reset();
         this.userProfileForm.controls["status"].setValue("Active");
         this.isUpdateMode = false;
         this.selectedRowIndex = -1;
+        this.loadListData();
     }
 
     loadRoleList() {
@@ -188,7 +222,11 @@ export class UserProfileComponent implements OnInit {
         });
     }
 
-    onRoleChange(roleId: any) {
-        this.selectedRole = this.roleList.find((role) => role.id === roleId) || null;
+    onRoleChange(roleId: number) {
+        this.selectedRole = this.roleList.find((role) => role.id === roleId) || new Role();
+    }
+
+    onScrollToEnd() {
+        this.loadRoleList();
     }
 }

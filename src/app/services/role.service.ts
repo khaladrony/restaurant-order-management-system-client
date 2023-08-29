@@ -9,11 +9,16 @@ import { Role } from "../models/role.model";
   providedIn: "root",
 })
 export class RoleService {
+
+  API_FEATURE_NAME: String;
+
   constructor(
     private router: Router,
     private httpClient: HttpClient,
     private environment: EnvService
-  ) {}
+  ) {
+    this.API_FEATURE_NAME = '/roles';
+  }
 
   create(role: Role): Observable<any> {
     const token = sessionStorage.getItem("token");
@@ -24,7 +29,7 @@ export class RoleService {
     const formData: FormData = new FormData();
     formData.append('roleDTO', JSON.stringify(role));
 
-    return this.httpClient.post(`${this.environment.apiURL}/roles/add`, formData, { headers: headers });
+    return this.httpClient.post(`${this.environment.apiURL}${this.API_FEATURE_NAME}/add`, formData, { headers: headers });
   }
 
 
@@ -37,7 +42,7 @@ export class RoleService {
     const formData: FormData = new FormData();
     formData.append('roleDTO', JSON.stringify(role));
 
-    return this.httpClient.put(`${this.environment.apiURL}/roles/update`, formData, { headers: headers });
+    return this.httpClient.put(`${this.environment.apiURL}${this.API_FEATURE_NAME}/update`, formData, { headers: headers });
   }
 
 
@@ -50,7 +55,7 @@ export class RoleService {
     let params = new HttpParams();
     params = params.append('id', id);
 
-    return this.httpClient.delete(`${this.environment.apiURL}/roles/delete`, { headers, params });
+    return this.httpClient.delete(`${this.environment.apiURL}${this.API_FEATURE_NAME}/delete`, { headers, params });
   }
 
   getList(formData: any): Observable<any> {
@@ -59,6 +64,6 @@ export class RoleService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.httpClient.post(`${this.environment.apiURL}/roles/list`, formData, { headers: headers });
+    return this.httpClient.post(`${this.environment.apiURL}${this.API_FEATURE_NAME}/list`, formData, { headers: headers });
   }
 }

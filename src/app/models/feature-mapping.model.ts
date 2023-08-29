@@ -5,8 +5,10 @@ export class FeatureMapping {
     id: number;
     version: number;
 
-    role = Role;
-    feature = Feature
+    roleId: number;
+    rolesName: string;
+    featureId: number
+    featuresName: string;
     status: string;
 
     createdBy: number;

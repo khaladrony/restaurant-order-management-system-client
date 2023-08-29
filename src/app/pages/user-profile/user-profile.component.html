@@ -19,6 +19,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <input type="text" id="userId" name="userId" hidden>
                                         <label class="form-control-label" for="username">Username</label>
                                         <input type="text" id="username" name="username" formControlName="username"
                                             class="form-control form-control-alternative" placeholder="" value="">
@@ -28,7 +29,7 @@
                                             *Username is required.</div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6" *ngIf="!isUpdateMode">
                                     <div class="form-group">
                                         <label class="form-control-label" for="password">Password</label>
                                         <input type="text" id="password" name="password" formControlName="password"
@@ -72,26 +73,17 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="role">Roles</label>
-                                        <!-- <select formControlName="role" class="form-control">
-                                            <option>Select Role</option>
-                                            <option *ngFor="let role of roleList">{{role.name}}</option>
-                                        </select> -->
-
-                                        <!-- <ng-select class="col-md-4 w-100" placeholder="-Select Role-"
-                                            formControlName="role" id="role" (change)="onRoleChange($event)">
-                                            <ng-option *ngFor="let role of roleList" [value]="role.id">
-                                                {{role.name}}
-                                            </ng-option>
-
-                                        </ng-select> -->
-
-                                        <!-- <ng-select>
-
-                                        </ng-select> -->
-
-                                        <div class="text-danger float-end"
-                                            *ngIf="userProfileForm['controls']['role'].errors?.['required'] && userProfileForm['controls']['role'].touched">
-                                            *Role required
+                                        <div class="col-md-7">
+                                            <ng-select id="role" formControlName="role" placeholder="-Select Role-"
+                                                (change)="onRoleChange($event)" (search)="loadRoleList()"
+                                                (scrollToEnd)="onScrollToEnd()">
+                                                <ng-option *ngFor="let role of roleList" [value]="role.id">
+                                                    {{role.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <div class="text-danger float-end"
+                                                *ngIf="userProfileForm['controls']['role'].errors?.['required'] && userProfileForm['controls']['role'].touched">
+                                                *Role Required</div>
                                         </div>
                                     </div>
                                 </div>
@@ -138,15 +130,16 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
-                    <h3 class="mb-0">Use list</h3>
+                    <h3 class="mb-0">User list</h3>
                 </div>
 
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
-                                <th scope="col">Email</th>
                                 <th scope="col">Username</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Email</th>
                                 <th scope="col">Phone No</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Status</th>
@@ -155,8 +148,9 @@
                         <tbody *ngIf="users?.length != 0">
                             <tr *ngFor="let user of users; let i = index" style="cursor:pointer"
                                 (click)="onSelectRow(user, i)" [ngClass]="{'selectedRow' : i == selectedRowIndex}">
-                                <td>{{user.email}}</td>
                                 <td>{{user.username}}</td>
+                                <td>{{user.role?.name}}</td>
+                                <td>{{user.email}}</td>
                                 <td>{{user.phoneNo}}</td>
                                 <td>{{user.address}}</td>
                                 <td class="align-middle text-left text-sm">

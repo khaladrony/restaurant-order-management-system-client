@@ -20,31 +20,40 @@
                             <div class="row">
                                 <div class="col-lg-5">
                                     <div class="form-group">
+                                        <input type="text" id="featureMapId" name="featureMapId" hidden>
                                         <label class="form-control-label" for="role">Roles</label>
-                                        <select formControlName="role" class="form-control">
-                                            <option>Select Role</option>
-                                            <option *ngFor="let role of roleList">{{role}}</option>
-                                        </select>
-
-                                        <div class="text-danger float-end"
-                                            *ngIf="featureMappingForm['controls']['role'].errors?.['required'] && featureMappingForm['controls']['role'].touched">
-                                            *Role is required.
+                                        <div class="col-md-7">
+                                            <ng-select id="role" formControlName="role" placeholder="-Select Role-"
+                                                (change)="onRoleChange($event)" (search)="loadRoleList()"
+                                                (scrollToEnd)="onRoleScrollToEnd()">
+                                                <ng-option *ngFor="let role of roleList" [value]="role.id">
+                                                    {{role.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <div class="text-danger float-end"
+                                                *ngIf="featureMappingForm['controls']['role'].errors?.['required'] && featureMappingForm['controls']['role'].touched">
+                                                *Role Required</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="feature"> Features</label>
-                                        <select formControlName="role" class="form-control">
-                                            <option>Select Feature</option>
-                                            <option *ngFor="let feature of featureList">{{feature}}</option>
-                                        </select>
-
-                                        <div class="text-danger float-end"
-                                            *ngIf="featureMappingForm['controls']['feature'].errors?.['required'] && featureMappingForm['controls']['feature'].touched">
-                                            *Feature is required.
+                                        <label class="form-control-label" for="parentFeature">Features</label>
+                                        <div class="col-md-7">
+                                            <ng-select id="feature" formControlName="feature"
+                                                placeholder="-Select Features-" (change)="onFeatureChange($event)"
+                                                (search)="loadFeatureList()" (scrollToEnd)="onFeatureScrollToEnd()">
+                                                <ng-option *ngFor="let feature of featureList" [value]="feature.id">
+                                                    {{feature.name}}
+                                                </ng-option>
+                                            </ng-select>
                                         </div>
                                     </div>
+                                    <div class="text-danger float-end"
+                                        *ngIf="featureMappingForm['controls']['feature'].errors?.['required'] && featureMappingForm['controls']['feature'].touched">
+                                        *Feature is required.
+                                    </div>
+
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
@@ -70,7 +79,7 @@
                             <button *ngIf="!isUpdateMode" type="button" class="btn btn-success"
                                 (click)="submit()">Save</button>
                             <button *ngIf="isUpdateMode" type="button" class="btn btn-warning"
-                                (click)="updateSelectedRow()">Update</button>
+                                (click)="update()">Update</button>
                             <button *ngIf="isUpdateMode" type="button" class="btn btn-danger float-right ml-2"
                                 (click)="delete()">Delete</button>
                             <button type="button" class="btn btn-primary float-right"
@@ -105,8 +114,8 @@
                             <tr *ngFor="let featureMap of featureMaps; let i = index" style="cursor:pointer"
                                 (click)="onSelectRow(featureMap, i)"
                                 [ngClass]="{'selectedRow' : i == selectedRowIndex}">
-                                <td>{{featureMap.role}}</td>
-                                <td>{{featureMap.feature}}</td>
+                                <td>{{featureMap.rolesName}}</td>
+                                <td>{{featureMap.featuresName}}</td>
                                 <td class="align-middle text-left text-sm">
                                     <span
                                         [ngClass]="featureMap.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{featureMap.status}}</span>

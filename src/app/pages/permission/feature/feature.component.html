@@ -20,6 +20,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <input type="text" id="featureId" name="featureId" hidden>
                                         <label class="form-control-label" for="featureName">Feature Name</label>
                                         <input type="text" id="featureName" name="featureName"
                                             formControlName="featureName" class="form-control form-control-alternative"
@@ -47,10 +48,15 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="parentFeature">Parent Features</label>
-                                        <select formControlName="parentFeature" class="form-control">
-                                            <option>Select Parent Feature</option>
-                                            <option *ngFor="let feature of featureList">{{feature}}</option>
-                                        </select>
+                                        <div class="col-md-7">
+                                            <ng-select id="parentFeature" formControlName="parentFeature" placeholder="-Select Parent Features-"
+                                                (change)="onFeatureChange($event)" (search)="getParentFeatureList()"
+                                                (scrollToEnd)="onScrollToEnd()">
+                                                <ng-option *ngFor="let feature of parentFeatureList"[value]="feature.id">
+                                                    {{feature.name}}
+                                                </ng-option>
+                                            </ng-select>                                            
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -121,10 +127,10 @@
                         <tbody *ngIf="features?.length != 0">
                             <tr *ngFor="let feature of features; let i = index" style="cursor:pointer"
                                 (click)="onSelectRow(feature, i)" [ngClass]="{'selectedRow' : i == selectedRowIndex}">
-                                <td>{{feature.featureName}}</td>
+                                <td>{{feature.name}}</td>
                                 <td>{{feature.path}}</td>
-                                <td>{{feature.parentFeature}}</td>
-                                <td>{{feature.featureIcon}}</td>
+                                <td>{{feature?.parentFeatureName}}</td>
+                                <td>{{feature.icon}}</td>
                                 <td class="align-middle text-left text-sm">
                                     <span
                                         [ngClass]="feature.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{feature.status}}</span>

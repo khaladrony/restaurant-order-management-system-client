@@ -2,12 +2,13 @@ export class Feature {
     id: number;
     version: number;
 
-    featureName: string;
+    name: string;
     path: string;
-    featureIcon: string;
+    icon: string;
     type: string;   //link,submenu
     isCollapsed: boolean;
-    parentFeature: string;
+    parentFeatureId: number;
+    parentFeatureName: string;
     status:string;
 
     createdBy: number;

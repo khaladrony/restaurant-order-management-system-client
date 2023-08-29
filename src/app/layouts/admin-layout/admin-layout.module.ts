@@ -17,6 +17,7 @@ import { RestaurantInfoComponent } from 'src/app/pages/restaurant/restaurant-inf
 import { FoodCategoryComponent } from 'src/app/pages/restaurant/food-category/food-category.component';
 import { DishComponent } from 'src/app/pages/restaurant/dish/dish.component';
 import { CustomersOrderComponent } from 'src/app/pages/restaurant/customers-order/customers-order.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { CustomersOrderComponent } from 'src/app/pages/restaurant/customers-orde
     HttpClientModule,
     NgbModule,
     ClipboardModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule
   ],
   declarations: [
     DashboardComponent,
