@@ -18,8 +18,9 @@
                         <div class="pl-lg-4">
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
+                                        <input type="text" id="foodCategoryId" name="foodCategoryId" hidden>
                                         <label class="form-control-label" for="foodCategory">Category</label>
                                         <input type="text" id="foodCategory" name="foodCategory"
                                             formControlName="foodCategory" class="form-control form-control-alternative"
@@ -31,7 +32,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Image upload</label>
+                                        <label class="btn btn-default">
+                                            <input type="file" accept="image/*" (change)="selectFile($event)" />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
                                     <div class="form-group">
                                         <label class="form-control-label">Status</label>
 
@@ -50,21 +59,13 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-4">
-                                    <label class="btn btn-default">
-                                        <input type="file" accept="image/*" (change)="selectFile($event)" />
-                                    </label>
-                                </div>
-
-                                <div class="col-2">
-                                    <button class="btn btn-success float-right" [disabled]="!selectedFiles"
-                                        (click)="upload()">
-                                        Upload
-                                    </button>
-                                </div>
-
-                                <div class="col-3">
-                                    <img [src]="preview" class="img-fluid rounded">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label"></label>
+                                        <img [src]="preview" class="img-fluid rounded">
+                                        <!-- <img [src]="imageShow" class="img-fluid rounded"> -->
+                                    </div>
                                 </div>
                             </div>
 
@@ -101,20 +102,30 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Category</th>
-                                <th scope="col">Status</th>
-                                <th scope="col"></th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Status</th>                                
                             </tr>
                         </thead>
                         <tbody *ngIf="foodCategories?.length != 0">
                             <tr *ngFor="let foodCategory of foodCategories; let i = index" style="cursor:pointer"
                                 (click)="onSelectRow(foodCategory, i)"
                                 [ngClass]="{'selectedRow' : i == selectedRowIndex}">
-                                <td>{{foodCategory.foodCategory}}</td>
+                                <td>{{foodCategory.category}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img
+                                            [src]=foodCategory.imageBlob
+                                            alt=""
+                                            style="width: 100px; height: 100px"
+                                            class="rounded-circle"
+                                            />
+                                    </div>
+                                </td>
                                 <td class="align-middle text-left text-sm">
                                     <span
                                         [ngClass]="foodCategory.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{foodCategory.status}}</span>
                                 </td>
-                            </tr>
+                            </tr>                           
 
                         </tbody>
                     </table>

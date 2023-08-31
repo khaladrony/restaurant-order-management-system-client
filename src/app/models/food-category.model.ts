@@ -2,7 +2,11 @@ export class FoodCategory {
     id: number;
     version: number;
 
-    foodCategory: string;
+    category: string;    
+    imageName: string;
+    imageType: string;
+    imageByte: string;
+    imageBlob: string;
     status: string
 
     createdBy: number;
