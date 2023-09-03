@@ -11,6 +11,7 @@ import { RestaurantInfoComponent } from 'src/app/pages/restaurant/restaurant-inf
 import { FoodCategoryComponent } from 'src/app/pages/restaurant/food-category/food-category.component';
 import { DishComponent } from 'src/app/pages/restaurant/dish/dish.component';
 import { CustomersOrderComponent } from 'src/app/pages/restaurant/customers-order/customers-order.component';
+import { RestaurantDishComponent } from 'src/app/pages/restaurant/restaurant-dish/restaurant-dish.component';
 
 export const AdminLayoutRoutes: Routes = [
     {
@@ -25,7 +26,8 @@ export const AdminLayoutRoutes: Routes = [
             { path: 'restaurant', component: RestaurantInfoComponent },
             { path: 'food-category', component: FoodCategoryComponent },
             { path: 'dish', component: DishComponent },
-            { path: 'customer-order', component: CustomersOrderComponent }
+            { path: 'customer-order', component: CustomersOrderComponent },
+            { path: 'restaurant-dish', component: RestaurantDishComponent }
         ]
     }
 ];

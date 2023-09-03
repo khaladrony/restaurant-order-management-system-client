@@ -8,7 +8,7 @@
                 <div class="card-header bg-white border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0">Create Restaurant</h3>
+                            <h3 class="mb-0">{{title}}</h3>
                         </div>
 
                     </div>
@@ -17,8 +17,9 @@
                     <form [formGroup]="restaurantForm">
                         <div class="pl-lg-4">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-5">
                                     <div class="form-group">
+                                        <input type="text" id="restaurantId" name="restaurantId" hidden>
                                         <label class="form-control-label" for="restaurantName">Restaurant name</label>
                                         <input type="text" id="restaurantName" name="restaurantName"
                                             formControlName="restaurantName"
@@ -29,52 +30,7 @@
                                             *Username is required.</div>
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="branchCode">Branch Code</label>
-                                        <input type="text" id="branchCode" name="branchCode"
-                                            formControlName="branchCode" class="form-control form-control-alternative"
-                                            placeholder="">
-
-                                            <div class="text-danger float-end"
-                                            *ngIf="restaurantForm['controls']['branchCode'].errors?.['required'] && restaurantForm['controls']['branchCode'].touched">
-                                            *Branch Code is required.</div>
-                                    </div>
-                                </div>
                                 <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="branchManager">Branch Manager</label>
-                                        <input type="text" id="branchManager" name="branchManager"
-                                            formControlName="branchManager"
-                                            class="form-control form-control-alternative" placeholder="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="address">Address</label>
-                                        <input id="address" name="address" formControlName="address"
-                                            class="form-control form-control-alternative" placeholder="Address" value=""
-                                            type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="phoneNo">Phone Number</label>
-                                        <input type="text" id="phoneNo" name="phoneNo" formControlName="phoneNo"
-                                            class="form-control form-control-alternative" placeholder="Phone Number"
-                                            value="">
-
-                                            <div class="text-danger float-end"
-                                            *ngIf="restaurantForm['controls']['phoneNo'].errors?.['required'] && restaurantForm['controls']['phoneNo'].touched">
-                                            *Phone Number is required.</div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="webAddress">Web address</label>
                                         <input type="text" id="webAddress" name="webAddress"
@@ -82,7 +38,37 @@
                                             placeholder="Web address" value="">
                                     </div>
                                 </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="phoneNo">Phone Number</label>
+                                        <input type="text" id="phoneNo" name="phoneNo" formControlName="phoneNo"
+                                            class="form-control form-control-alternative" placeholder="Phone Number"
+                                            value="">
 
+                                        <div class="text-danger float-end"
+                                            *ngIf="restaurantForm['controls']['phoneNo'].errors?.['required'] && restaurantForm['controls']['phoneNo'].touched">
+                                            *Phone Number is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="address">Address</label>
+                                        <textarea _ngcontent-c6="" class="form-control form-control-alternative"
+                                            id="address" name="address" formControlName="address" placeholder=""
+                                            rows="3">
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Image upload</label>
+                                        <label class="btn btn-default">
+                                            <input type="file" accept="image/*" (change)="selectFile($event)" />
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label class="form-control-label">Status</label>
@@ -100,11 +86,23 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">                               
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label"></label>
+                                        <img [src]="preview" class="img-fluid rounded">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="pl-lg-4">                            
-                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success" (click)="submit()">Save</button>
-                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning" (click)="updateSelectedRow()">Update</button>
+                        <div class="pl-lg-4">
+                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success"
+                                (click)="submit()">Save</button>
+                            <button *ngIf="isUpdateMode" type="button" class="btn btn-warning"
+                                (click)="updateSelectedRow()">Update</button>
                             <button *ngIf="isUpdateMode" type="button" class="btn btn-danger float-right ml-2"
                                 (click)="delete()">Delete</button>
                             <button type="button" class="btn btn-primary float-right"
@@ -132,8 +130,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Restaurant name</th>
-                                <th scope="col">Branch Code</th>
-                                <th scope="col">Branch Manager</th>
+                                <th scope="col">Image</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Phone no</th>
                                 <th scope="col">Web address</th>
@@ -144,9 +141,17 @@
                             <tr *ngFor="let restaurant of restaurants; let i = index" style="cursor:pointer"
                                 (click)="onSelectRow(restaurant, i)"
                                 [ngClass]="{'selectedRow' : i == selectedRowIndex}">
-                                <td>{{restaurant.restaurantName}}</td>
-                                <td>{{restaurant.branchCode}}</td>
-                                <td>{{restaurant.branchManager}}</td>
+                                <td>{{restaurant.name}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img
+                                            [src]=restaurant.imageBlob
+                                            alt=""
+                                            style="width: 100px; height: 100px"
+                                            class="rounded-circle"
+                                            />
+                                    </div>
+                                </td>
                                 <td>{{restaurant.address}}</td>
                                 <td>{{restaurant.phoneNo}}</td>
                                 <td>{{restaurant.webAddress}}</td>

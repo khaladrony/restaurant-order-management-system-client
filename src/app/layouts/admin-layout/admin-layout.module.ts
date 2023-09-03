@@ -18,6 +18,7 @@ import { FoodCategoryComponent } from 'src/app/pages/restaurant/food-category/fo
 import { DishComponent } from 'src/app/pages/restaurant/dish/dish.component';
 import { CustomersOrderComponent } from 'src/app/pages/restaurant/customers-order/customers-order.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { RestaurantDishComponent } from 'src/app/pages/restaurant/restaurant-dish/restaurant-dish.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     RestaurantInfoComponent,
     FoodCategoryComponent,
     DishComponent,
+    RestaurantDishComponent,
     CustomersOrderComponent
   ]
 })

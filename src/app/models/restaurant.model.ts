@@ -3,12 +3,14 @@ export class Restaurant {
     id: number;
     version: number;
 
-    restaurantName:string;
-    branchCode:string;
-    branchManager:string;
+    name:string;
     address:string;
     phoneNo:string;
     webAddress:string;
+    imageName: string;
+    imageType: string;
+    imageByte: string;
+    imageBlob: string;
     status:string;
 
     createdBy: number;

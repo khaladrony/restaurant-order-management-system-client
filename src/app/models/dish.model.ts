@@ -1,9 +1,15 @@
+import { FoodCategory } from "./food-category.model";
+
 export class Dish {
     id: number;
     version: number;
 
-    dishName: string;
-    foodCategory: string;
+    name: string;
+    foodCategory: FoodCategory;
+    imageName: string;
+    imageType: string;
+    imageByte: string;
+    imageBlob: string;
     status: string
 
     createdBy: number;

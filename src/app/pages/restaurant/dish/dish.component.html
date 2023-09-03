@@ -20,6 +20,7 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="form-group">
+                                        <input type="text" id="dishId" name="dishId" hidden>
                                         <label class="form-control-label" for="dishName"> Dish Name</label>
                                         <input type="text" id="dishName" name="dishName" formControlName="dishName"
                                             class="form-control form-control-alternative" placeholder="" value="">
@@ -33,14 +34,17 @@
                                 <div class="col-lg-5">
                                     <div class="form-group">
                                         <label class="form-control-label" for="foodCategory">Food Category</label>
-                                        <select formControlName="foodCategory" class="form-control">
-                                            <option>Select Food Category</option>
-                                            <option *ngFor="let category of foodCategoryList">{{category}}</option>
-                                        </select>
-
-                                        <div class="text-danger float-end"
-                                            *ngIf="dishForm['controls']['foodCategory'].errors?.['required'] && dishForm['controls']['foodCategory'].touched">
-                                            *Food Category is required.
+                                        <div class="col-md-7">
+                                            <ng-select id="foodCategory" formControlName="foodCategory" placeholder="-Select Food Category-"
+                                                (change)="onFoodCategoryChange($event)" (search)="getFoodCategoryList()"
+                                                (scrollToEnd)="onScrollToEnd()">
+                                                <ng-option *ngFor="let foodCategory of foodCategoryList" [value]="foodCategory.id">
+                                                    {{foodCategory.category}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <div class="text-danger float-end"
+                                                *ngIf="dishForm['controls']['foodCategory'].errors?.['required'] && dishForm['controls']['foodCategory'].touched">
+                                                *Food Category Required</div>
                                         </div>
                                     </div>
                                 </div>
@@ -61,6 +65,24 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Image upload</label>
+                                        <label class="btn btn-default">
+                                            <input type="file" accept="image/*" (change)="selectFile($event)" />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label"></label>
+                                        <img [src]="preview" class="img-fluid rounded">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -93,6 +115,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Dish</th>
+                                <th scope="col">Image</th>
                                 <th scope="col">Food Category</th>
                                 <th scope="col">Status</th>
                             </tr>
@@ -100,8 +123,18 @@
                         <tbody *ngIf="dishes?.length != 0">
                             <tr *ngFor="let dish of dishes; let i = index" style="cursor:pointer"
                                 (click)="onSelectRow(dish, i)" [ngClass]="{'selectedRow' : i == selectedRowIndex}">
-                                <td>{{dish.dishName}}</td>
-                                <td>{{dish.foodCategory}}</td>
+                                <td>{{dish.name}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img
+                                            [src]=dish.imageBlob
+                                            alt=""
+                                            style="width: 100px; height: 100px"
+                                            class="rounded-circle"
+                                            />
+                                    </div>
+                                </td>
+                                <td>{{dish.foodCategory.category}}</td>
                                 <td class="align-middle text-left text-sm">
                                     <span
                                         [ngClass]="dish.status=='Active'? 'badge badge-sm badge-success':'badge badge-sm badge-danger'">{{dish.status}}</span>

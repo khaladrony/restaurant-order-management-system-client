@@ -35,7 +35,6 @@ export class FoodCategoryComponent implements OnInit {
     progress = 0;
     message = '';
     preview = '';
-    imageShow:any;
 
     imageInfos?: Observable<any>;
     fileDetails!: FileDetails;
@@ -182,36 +181,6 @@ export class FoodCategoryComponent implements OnInit {
 
     }
 
-    imagePopulate(foodCategory: FoodCategory){
-        const imageBlob = this.dataURItoBlob(foodCategory.imageByte, foodCategory.imageType );
-        const imageFile = new File([imageBlob], foodCategory.imageName, { type: foodCategory.imageType });
-
-        if (imageFile) {
-            this.preview = '';
-            this.currentFile = imageFile;
-
-            const reader = new FileReader();
-
-            reader.onload = (e: any) => {
-                console.log(e.target.result);
-                this.preview = e.target.result;
-            };
-
-            reader.readAsDataURL(this.currentFile);
-        }
-    }
-
-    dataURItoBlob(dataURI, imageType) {
-        const byteString = window.atob(dataURI);
-        const arrayBuffer = new ArrayBuffer(byteString.length);
-        const int8Array = new Uint8Array(arrayBuffer);
-        for (let i = 0; i < byteString.length; i++) {
-          int8Array[i] = byteString.charCodeAt(i);
-        }
-        const blob = new Blob([int8Array], { type: imageType});    
-        return blob;
-     }
-
     loadListData() {
         let data = {};
         this.loader.show();
@@ -272,5 +241,35 @@ export class FoodCategoryComponent implements OnInit {
             }
         }
     }
+
+    imagePopulate(foodCategory: FoodCategory){
+        const imageBlob = this.dataURItoBlob(foodCategory.imageByte, foodCategory.imageType );
+        const imageFile = new File([imageBlob], foodCategory.imageName, { type: foodCategory.imageType });
+
+        if (imageFile) {
+            this.preview = '';
+            this.currentFile = imageFile;
+
+            const reader = new FileReader();
+
+            reader.onload = (e: any) => {
+                console.log(e.target.result);
+                this.preview = e.target.result;
+            };
+
+            reader.readAsDataURL(this.currentFile);
+        }
+    }
+
+    dataURItoBlob(dataURI, imageType) {
+        const byteString = window.atob(dataURI);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const int8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+          int8Array[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([int8Array], { type: imageType});    
+        return blob;
+     }
 
 }

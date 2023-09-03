@@ -1,113 +1,304 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Observable } from 'rxjs';
 import { Dish } from 'src/app/models/dish.model';
+import { FileDetails } from 'src/app/models/file-details.model';
+import { FoodCategory } from 'src/app/models/food-category.model';
 import { ConfirmationModalService } from 'src/app/services/confirmation-modal/confirmation-modal.service';
+import { DishService } from 'src/app/services/dish.service';
+import { FileUploadService } from 'src/app/services/file-upload.service';
+import { FoodCategoryService } from 'src/app/services/food-category.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { UtilService } from 'src/app/services/util.service';
 
 @Component({
-  selector: 'app-dish',
-  templateUrl: './dish.component.html',
-  styleUrls: ['./dish.component.scss']
+    selector: 'app-dish',
+    templateUrl: './dish.component.html',
+    styleUrls: ['./dish.component.scss']
 })
 export class DishComponent implements OnInit {
 
-  title: string;
-  dishForm: UntypedFormGroup;
-  dishes: Dish[] = [];
-  dish: Dish;
-  selectedRowIndex: number;
-  isUpdateMode = false;
-  foodCategoryList: any = ['Burger', 'Pizza', 'Pasta', 'Chicken Fry']
+    ROUTER_NAVIGATE: String;
 
-  constructor(private formBuilder: UntypedFormBuilder,
-    private utilService: UtilService,
-    private confirmationModalService: ConfirmationModalService,
-    private notifyService: NotificationService
-  ) {
-    this.selectedRowIndex = -1;
-  }
+    title: string;
+    dishId: number;
+    dishForm: UntypedFormGroup;
+    dishes: Dish[] = [];
+    dish: Dish;
+    selectedRowIndex: number;
+    isUpdateMode = false;
+    selectedFoodCategory: FoodCategory = new FoodCategory();
+    foodCategoryList: FoodCategory[] = [];
 
-  ngOnInit(): void {
-    this.title = 'Dish Create';
+    //Image upload
+    selectedFiles?: FileList;
+    currentFile?: File;
+    progress = 0;
+    message = '';
+    preview = '';
+    imageShow: any;
 
-    this.dishForm = this.formBuilder.group({
-      dishName: new FormControl('', Validators.required),
-      foodCategory: new FormControl(null, Validators.required),  
-      status: ['Active']
-    });
-  }
+    imageInfos?: Observable<any>;
+    fileDetails!: FileDetails;
+    fileUris: Array<string> = [];
 
-  submit() {
-    if (!this.dishForm.valid) {
-      this.utilService.validateAllFormFields(this.dishForm);
-      return;
+    constructor(
+        private router: Router,
+        private formBuilder: UntypedFormBuilder,
+        private confirmationModalService: ConfirmationModalService,
+        private loader: NgxSpinnerService,
+        private notifyService: NotificationService,
+        private utilService: UtilService,
+        private fileUploadService: FileUploadService,
+        private dishService: DishService,
+        private foodCategoryService: FoodCategoryService
+    ) {
+        this.selectedRowIndex = -1;
+        this.dish = new Dish();
+        this.ROUTER_NAVIGATE = 'admin/dish';
+
     }
 
-    this.dish = new Dish();
-    this.dish.dishName = this.dishForm.value.dishName;
-    this.dish.foodCategory = this.dishForm.value.foodCategory;
-    this.dish.status = this.dishForm.value.status;
+    ngOnInit(): void {
+        this.title = 'Dish Create';
 
-    this.dishes.push(this.dish);
+        this.dishForm = this.formBuilder.group({
+            dishId: new FormControl(""),
+            dishName: new FormControl('', Validators.required),
+            foodCategory: new FormControl(null, Validators.required),
+            status: ['Active']
+        });
 
-    console.info(this.dish);
+        this.getFoodCategoryList();
+        this.loadListData();
+    }
 
-    this.resetForm();
-
-    this.notifyService.showSuccess("Created successfully!", "SUCCESS");
-
-  }
-
-  delete() {
-    this.confirmationModalService.confirm(
-      "Delete confirmation!",
-      "Are you sure you want to delete?")
-      .subscribe((answer) => {
-        if (answer === 'yes') {
-          this.notifyService.showError("Deleted successfully!", "DELETED");
-        } else {
-          return;
+    submit() {
+        if (!this.dishForm.valid) {
+            this.utilService.validateAllFormFields(this.dishForm);
+            return;
         }
-      });
 
-  }
+        this.dish = new Dish();
+        this.dish.name = this.dishForm.value.dishName;
+        this.dish.foodCategory = this.selectedFoodCategory;
+        this.dish.status = this.dishForm.value.status;
 
-  onSelectRow(dish: Dish, index: number) {
-    this.isUpdateMode = true;
+        if (this.dishForm.valid) {
+            this.loader.show();
 
-    this.selectedRowIndex = index == this.selectedRowIndex ? -1 : index;
+            this.dishService.create(this.dish, this.currentFile).subscribe({
+                next: (response) => {
+                    console.log(response);
+                    this.notifyService.showSuccess("success", response.message);
 
-    if (this.selectedRowIndex == -1) {
-      this.resetForm();
-      return;
+                    this.router.navigate([this.ROUTER_NAVIGATE]);
+                },
+                complete: () => {
+                    this.loader.hide();
+                    this.resetForm();
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.notifyService.showError("error", err.error?.message);
+                    this.loader.hide();
+                },
+            });
+        }
     }
 
+    updateSelectedRow() {
+        this.dish.id = this.dishForm.value.dishId;
+        this.dish.name = this.dishForm.value.dishName;
+        this.dish.foodCategory = this.selectedFoodCategory;
+        this.dish.status = this.dishForm.value.status;
 
-    this.dishForm.controls['dishName'].setValue(dish.dishName);
-    this.dishForm.controls['foodCategory'].setValue(dish.foodCategory);
-    this.dishForm.controls['status'].setValue(dish.status);
+        if (this.dishForm.valid) {
+            this.loader.show();
 
-  }
+            this.dishService.update(this.dish, this.currentFile).subscribe({
+                next: (response) => {
+                    console.log(response);
+                    this.notifyService.showSuccess("success", response.message);
 
-  updateSelectedRow() {
-    this.dish.dishName = this.dishForm.value.dishName;
-    this.dish.foodCategory = this.dishForm.value.foodCategory;
-    this.dish.status = this.dishForm.value.status;
+                    this.router.navigate([this.ROUTER_NAVIGATE]);
+                },
+                complete: () => {
+                    this.loader.hide();
+                    this.resetForm();
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.notifyService.showError("error", err.error?.message);
+                    this.loader.hide();
+                },
+            });
+        }
+    }
 
-    this.dishes.push(this.dish);
+    delete() {
+        this.dishId = this.dishForm.value.dishId;
 
-    console.info(this.dish);
+        this.confirmationModalService.confirm(
+            "Delete confirmation!",
+            "Are you sure you want to delete?")
+            .subscribe((answer) => {
+                if (answer === 'yes') {
+                    this.dishService.delete(this.dishId).subscribe({
+                        next: () => {
+                            this.notifyService.showSuccess(
+                                "success",
+                                "Deleted Successfully."
+                            );
 
-    this.resetForm();
+                            this.router.navigate([this.ROUTER_NAVIGATE]);
+                        },
+                        complete: () => {
+                            this.loader.hide();
+                            this.resetForm();
+                        },
+                        error: (err) => {
+                            this.notifyService.showError("error", err.message);
+                            console.log(err);
+                        },
+                    });
+                } else {
+                    return;
+                }
+            });
 
-    this.notifyService.showSuccess("Updated successfully!", "UPDATED");
-  }
+    }
 
-  resetForm() {
-    this.dishForm.reset();
-    this.dishForm.controls['status'].setValue('Active');
-    this.isUpdateMode = false;
-  }
+    onSelectRow(dish: Dish, index: number) {
+        this.isUpdateMode = true;
+
+        this.selectedRowIndex = index == this.selectedRowIndex ? -1 : index;
+
+        if (this.selectedRowIndex == -1) {
+            this.resetForm();
+            return;
+        }
+
+
+        this.dishForm.controls['dishId'].setValue(dish.id);
+        this.dishForm.controls['dishName'].setValue(dish.name);
+        this.dishForm.controls["foodCategory"].setValue(dish.foodCategory.id);
+        this.dishForm.controls['status'].setValue(dish.status);  
+        this.selectedFoodCategory = dish.foodCategory;
+        this.imagePopulate(dish);
+
+    }
+
+    loadListData() {
+        let data = {};
+        this.loader.show();
+        this.dishService.getList(data).subscribe({
+            next: (data) => {
+                this.dishes = data.data;
+
+                for (const dish of this.dishes) {
+                    dish.imageBlob = 'data:image/jpeg;base64,' + dish.imageByte;
+                }
+            },
+            complete: () => {
+                this.loader.hide();
+            },
+            error: (err) => {
+                console.log(err);
+                this.loader.hide();
+            },
+        });
+    }
+
+    getFoodCategoryList() {
+        let data = {};
+        this.loader.show();
+        this.foodCategoryService.getList(data).subscribe({
+            next: (data) => {
+                this.foodCategoryList = data.data;
+            },
+            complete: () => {
+                this.loader.hide();
+            },
+            error: (err) => {
+                console.log(err);
+                this.loader.hide();
+            },
+        });
+    }
+
+    onFoodCategoryChange(foodCategoryId: number) {
+        this.selectedFoodCategory = this.foodCategoryList.find((foodCategory) => foodCategory.id === foodCategoryId) || new FoodCategory();
+    }
+
+    onScrollToEnd() {
+        this.getFoodCategoryList();
+    }
+
+    resetForm() {
+        this.dishForm.reset();
+        this.dishForm.controls['status'].setValue('Active');
+        this.isUpdateMode = false;
+        this.loadListData();
+        this.preview = '';
+    }
+
+    //Image upload
+    selectFile(event: any): void {
+        this.message = '';
+        this.preview = '';
+        this.progress = 0;
+        this.selectedFiles = event.target.files;
+
+        if (this.selectedFiles) {
+            const file: File | null = this.selectedFiles.item(0);
+
+            if (file) {
+                this.preview = '';
+                this.currentFile = file;
+
+                const reader = new FileReader();
+
+                reader.onload = (e: any) => {
+                    console.log(e.target.result);
+                    this.preview = e.target.result;
+                };
+
+                reader.readAsDataURL(this.currentFile);
+            }
+        }
+    }
+
+    imagePopulate(dish: Dish) {
+        const imageBlob = this.dataURItoBlob(dish.imageByte, dish.imageType);
+        const imageFile = new File([imageBlob], dish.imageName, { type: dish.imageType });
+
+        if (imageFile) {
+            this.preview = '';
+            this.currentFile = imageFile;
+
+            const reader = new FileReader();
+
+            reader.onload = (e: any) => {
+                console.log(e.target.result);
+                this.preview = e.target.result;
+            };
+
+            reader.readAsDataURL(this.currentFile);
+        }
+    }
+
+    dataURItoBlob(dataURI, imageType) {
+        const byteString = window.atob(dataURI);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const int8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+            int8Array[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([int8Array], { type: imageType });
+        return blob;
+    }
 
 }

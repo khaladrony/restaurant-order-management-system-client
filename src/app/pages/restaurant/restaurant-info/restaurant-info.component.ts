@@ -1,147 +1,269 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Restaurant } from 'src/app/models/restaurant.model';
 import { ConfirmationModalService } from 'src/app/services/confirmation-modal/confirmation-modal.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { RestaurantService } from 'src/app/services/restaurant.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
-  selector: 'app-restaurant-info',
-  templateUrl: './restaurant-info.component.html',
-  styleUrls: ['./restaurant-info.component.scss']
+    selector: 'app-restaurant-info',
+    templateUrl: './restaurant-info.component.html',
+    styleUrls: ['./restaurant-info.component.scss']
 })
 export class RestaurantInfoComponent implements OnInit {
 
-  restaurantForm: UntypedFormGroup;
-  restaurant: Restaurant;
-  restaurants: Restaurant[] = [];
-  selectedRowIndex: number;
-  isUpdateMode = false;
+    ROUTER_NAVIGATE: String;
+    title: String;
+    restaurantId:number;
+    restaurantForm: UntypedFormGroup;
+    restaurant: Restaurant;
+    restaurants: Restaurant[] = [];
+    selectedRowIndex: number;
+    isUpdateMode = false;
 
-  constructor(private formBuilder: UntypedFormBuilder,
-    private confirmationModalService: ConfirmationModalService,
-    private loader: NgxSpinnerService,
-    private notifyService: NotificationService) {
-    this.selectedRowIndex = -1;
-  }
+    //Image upload
+    selectedFiles?: FileList;
+    currentFile?: File;
+    progress = 0;
+    message = '';
+    preview = '';
 
-  ngOnInit(): void {
-    this.restaurantForm = this.formBuilder.group({
-      restaurantName: new FormControl('', Validators.required),
-      branchCode: new FormControl('', Validators.required),
-      branchManager: new FormControl(''),
-      address: new FormControl(''),
-      phoneNo: new FormControl('', Validators.required),
-      webAddress: new FormControl(''),
-      status: ['Active']
-    });
-  }
-
-  submit() {
-
-    if (!this.restaurantForm.valid) {
-      this.validateAllFormFields(this.restaurantForm);
-      return;
+    constructor(
+        private router: Router,
+        private formBuilder: UntypedFormBuilder,
+        private confirmationModalService: ConfirmationModalService,
+        private loader: NgxSpinnerService,
+        private notifyService: NotificationService,
+        private utilService: UtilService,
+        private restaurantService:RestaurantService
+    ) {
+        this.selectedRowIndex = -1;
+        this.restaurant = new Restaurant();
+        this.ROUTER_NAVIGATE = 'admin/restaurant';
     }
 
+    ngOnInit(): void {
+        this.title = 'Create Restaurant';
 
-    this.restaurant = new Restaurant();
+        this.restaurantForm = this.formBuilder.group({
+            restaurantId: new FormControl(''),
+            restaurantName: new FormControl('', Validators.required),
+            address: new FormControl(''),            
+            phoneNo: new FormControl(''),
+            webAddress: new FormControl(''),
+            status: ['Active']
+        });
+        this.loadListData();
+    }
 
-    this.restaurant.restaurantName = this.restaurantForm.value.restaurantName;
-    this.restaurant.branchCode = this.restaurantForm.value.branchCode;
-    this.restaurant.branchManager = this.restaurantForm.value.branchManager;
-    this.restaurant.address = this.restaurantForm.value.address;
-    this.restaurant.phoneNo = this.restaurantForm.value.phoneNo;
-    this.restaurant.webAddress = this.restaurantForm.value.webAddress;
-    this.restaurant.status = this.restaurantForm.value.status;
+    submit() {
 
-    this.restaurants.push(this.restaurant);
-
-    this.resetForm();
-
-    this.notifyService.showSuccess("User created successfully!", "SUCCESS");
-  }
-
-  delete() {
-    console.log('delete button pressed');
-
-    this.confirmationModalService.confirm(
-      "Delete confirmation!",
-      "Are you sure you want to delete?")
-      .subscribe((answer) => {
-        if (answer === 'yes') {
-          this.notifyService.showError("Data deleted successfully!", "DELETED");
-        } else {
-          return;
+        if (!this.restaurantForm.valid) {
+            this.utilService.validateAllFormFields(this.restaurantForm);
+            return;
         }
-      });
 
-  }
+        this.restaurant = new Restaurant();
+        this.restaurant.name = this.restaurantForm.value.restaurantName;
+        this.restaurant.address = this.restaurantForm.value.address;
+        this.restaurant.phoneNo = this.restaurantForm.value.phoneNo;
+        this.restaurant.webAddress = this.restaurantForm.value.webAddress;
+        this.restaurant.status = this.restaurantForm.value.status;
 
-  onSelectRow(restaurant: Restaurant, index: number) {
+        if (this.restaurantForm.valid) {
+            this.loader.show();
 
-    this.isUpdateMode = true;
+            this.restaurantService.create(this.restaurant, this.currentFile).subscribe({
+                next: (response) => {
+                    console.log(response);
+                    this.notifyService.showSuccess("success", response.message);
 
-    this.selectedRowIndex = index == this.selectedRowIndex ? -1 : index;
-
-    if (this.selectedRowIndex == -1) {
-      this.resetForm();
-      return;
+                    this.router.navigate([this.ROUTER_NAVIGATE]);
+                },
+                complete: () => {
+                    this.loader.hide();
+                    this.resetForm();
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.notifyService.showError("error", err.error?.message);
+                    this.loader.hide();
+                },
+            });
+        }
     }
 
+    updateSelectedRow() {
+        this.restaurant.id = this.restaurantForm.value.restaurantId;
+        this.restaurant.name = this.restaurantForm.value.restaurantName;
+        this.restaurant.address = this.restaurantForm.value.address;
+        this.restaurant.phoneNo = this.restaurantForm.value.phoneNo;
+        this.restaurant.webAddress = this.restaurantForm.value.webAddress;
+        this.restaurant.status = this.restaurantForm.value.status;
 
-    this.restaurantForm.controls['restaurantName'].setValue(restaurant.restaurantName);
-    this.restaurantForm.controls['branchCode'].setValue(restaurant.branchCode);
-    this.restaurantForm.controls['branchManager'].setValue(restaurant.branchManager);
-    this.restaurantForm.controls['phoneNo'].setValue(restaurant.phoneNo);
-    this.restaurantForm.controls['address'].setValue(restaurant.address);
-    this.restaurantForm.controls['status'].setValue(restaurant.status);
+        if (this.restaurantForm.valid) {
+            this.loader.show();
 
-  }
+            this.restaurantService.update(this.restaurant, this.currentFile).subscribe({
+                next: (response) => {
+                    console.log(response);
+                    this.notifyService.showSuccess("success", response.message);
 
-  updateSelectedRow() {
-    this.restaurant.restaurantName = this.restaurantForm.value.restaurantName;
-    this.restaurant.branchCode = this.restaurantForm.value.branchCode;
-    this.restaurant.branchManager = this.restaurantForm.value.branchManager;
-    this.restaurant.address = this.restaurantForm.value.address;
-    this.restaurant.phoneNo = this.restaurantForm.value.phoneNo;
-    this.restaurant.webAddress = this.restaurantForm.value.webAddress;
-    this.restaurant.status = this.restaurantForm.value.status;
+                    this.router.navigate([this.ROUTER_NAVIGATE]);
+                },
+                complete: () => {
+                    this.loader.hide();
+                    this.resetForm();
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.notifyService.showError("error", err.error?.message);
+                    this.loader.hide();
+                },
+            });
+        }
+    }
 
-    console.log(this.restaurant);
+    delete() {
+        console.log('delete button pressed');
 
-    this.restaurants.push(this.restaurant);
+        this.confirmationModalService.confirm(
+            "Delete confirmation!",
+            "Are you sure you want to delete?")
+            .subscribe((answer) => {
+                if (answer === 'yes') {
+                    this.restaurantService.delete(this.restaurantId).subscribe({
+                        next: () => {
+                            this.notifyService.showSuccess(
+                                "success",
+                                "Deleted Successfully."
+                            );
 
-    console.info(this.restaurant);
+                            this.router.navigate([this.ROUTER_NAVIGATE]);
+                        },
+                        complete: () => {
+                            this.loader.hide();
+                            this.resetForm();
+                        },
+                        error: (err) => {
+                            this.notifyService.showError("error", err.message);
+                            console.log(err);
+                        },
+                    });
+                } else {
+                    return;
+                }
+            });
 
-    this.resetForm();
+    }
 
-    this.notifyService.showSuccess("User updated successfully!", "UPDATED");
-  }
+    onSelectRow(restaurant: Restaurant, index: number) {
 
-  resetForm() {
-    this.restaurantForm.reset();
-    this.restaurantForm.controls['status'].setValue('Active');
-    this.isUpdateMode = false;
-  }
+        this.isUpdateMode = true;
 
-  validateAllFormFields(formGroup: FormGroup) {
-    let invalidFieldCount = 0;
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      const el = document.getElementById(field);
+        this.selectedRowIndex = index == this.selectedRowIndex ? -1 : index;
 
-      if (control instanceof FormControl && el && (control?.value == null
-        || control?.value === undefined || control?.value == '') && control?.status == "INVALID") {
-        control.markAsTouched({ onlySelf: true });
-        invalidFieldCount++;
-      } else if (control instanceof FormGroup) {
-        control.clearValidators();
-        control.markAsPristine();
-      }
-    });
+        if (this.selectedRowIndex == -1) {
+            this.resetForm();
+            return;
+        }
 
-    return invalidFieldCount;
-  }
+
+        this.restaurantForm.controls['restaurantId'].setValue(restaurant.id);
+        this.restaurantForm.controls['restaurantName'].setValue(restaurant.name);
+        this.restaurantForm.controls['phoneNo'].setValue(restaurant.phoneNo);
+        this.restaurantForm.controls['address'].setValue(restaurant.address);
+        this.restaurantForm.controls['status'].setValue(restaurant.status);
+        this.imagePopulate(restaurant);
+
+    }
+
+    loadListData() {
+        let data = {};
+        this.loader.show();
+        this.restaurantService.getList(data).subscribe({
+            next: (data) => {
+                this.restaurants = data.data;
+
+                for (const restaurant of this.restaurants) {
+                    restaurant.imageBlob = 'data:image/jpeg;base64,' + restaurant.imageByte;
+                }
+            },
+            complete: () => {
+                this.loader.hide();
+            },
+            error: (err) => {
+                console.log(err);
+                this.loader.hide();
+            },
+        });
+    }
+
+    resetForm() {
+        this.restaurantForm.reset();
+        this.restaurantForm.controls['status'].setValue('Active');
+        this.isUpdateMode = false;
+        this.loadListData();
+        this.preview = '';
+    }
+
+    //Image upload
+    selectFile(event: any): void {
+        this.message = '';
+        this.preview = '';
+        this.progress = 0;
+        this.selectedFiles = event.target.files;
+
+        if (this.selectedFiles) {
+            const file: File | null = this.selectedFiles.item(0);
+
+            if (file) {
+                this.preview = '';
+                this.currentFile = file;
+
+                const reader = new FileReader();
+
+                reader.onload = (e: any) => {
+                    console.log(e.target.result);
+                    this.preview = e.target.result;
+                };
+
+                reader.readAsDataURL(this.currentFile);
+            }
+        }
+    }
+
+    imagePopulate(restaurant: Restaurant) {
+        const imageBlob = this.dataURItoBlob(restaurant.imageByte, restaurant.imageType);
+        const imageFile = new File([imageBlob], restaurant.imageName, { type: restaurant.imageType });
+
+        if (imageFile) {
+            this.preview = '';
+            this.currentFile = imageFile;
+
+            const reader = new FileReader();
+
+            reader.onload = (e: any) => {
+                console.log(e.target.result);
+                this.preview = e.target.result;
+            };
+
+            reader.readAsDataURL(this.currentFile);
+        }
+    }
+
+    dataURItoBlob(dataURI, imageType) {
+        const byteString = window.atob(dataURI);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const int8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+            int8Array[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([int8Array], { type: imageType });
+        return blob;
+    }
 
 }
