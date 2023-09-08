@@ -1,0 +1,63 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 25px;
+}
+
+dt {
+    float: left;
+    clear: left;
+    width: 210px;
+    // font-weight: bold;
+    // color: green;
+}
+
+dd {
+    margin: 0 0 0 80px;
+    padding: 0 0 0.5em 0;
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: 0rem;
+}
+
+hr {
+    margin-top: 0rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.table td, .table th {
+    font-size: 0.8125rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.table-responsive {
+    overflow-x: visible; 
+    overflow:hidden; 
+    word-wrap:normal; 
+}
+
+.card .table td, .card .table th {
+    padding-left: 0rem;
+    padding-right: 1.5rem;
+}
+
+
+
+
+
+
+/* For the demo */
+body {
+	padding: 32px
+}
+
+

@@ -21,6 +21,7 @@ import { NotifierModule } from 'angular-notifier';
 import { CustomerOrderLayoutComponent } from './layouts/customer-order-layout/customer-order-layout.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,

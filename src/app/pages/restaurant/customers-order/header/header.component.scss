@@ -11,3 +11,16 @@
     top: 20px;
     color: blue;
 }
+
+.fa-user {
+    color: white;
+}
+
+.icon-sm i,
+.icon-sm svg {
+    font-size: 1.8rem;
+}
+
+.btn:not(:last-child) {
+    margin-right: -20.5rem;
+}

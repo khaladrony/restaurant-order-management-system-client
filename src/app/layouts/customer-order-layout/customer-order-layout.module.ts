@@ -7,7 +7,9 @@ import { ProductsComponent } from 'src/app/pages/restaurant/customers-order/prod
 import { HeaderComponent } from 'src/app/pages/restaurant/customers-order/header/header.component';
 import { FilterPipe } from 'src/app/pipes/filter.pipe';
 import { CustomerOrderLayoutRoutes } from './customer-order-layout.routing';
-
+import { CheckoutComponent } from 'src/app/pages/restaurant/customers-order/checkout/checkout.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({  
@@ -15,12 +17,15 @@ import { CustomerOrderLayoutRoutes } from './customer-order-layout.routing';
     CommonModule,
     RouterModule.forChild(CustomerOrderLayoutRoutes),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatExpansionModule,
+    MatIconModule
   ],
   declarations: [
     HeaderComponent,
     CartComponent,
     ProductsComponent,
+    CheckoutComponent,
     FilterPipe
   ]
 })

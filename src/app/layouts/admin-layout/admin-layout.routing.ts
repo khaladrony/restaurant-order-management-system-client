@@ -12,6 +12,7 @@ import { FoodCategoryComponent } from 'src/app/pages/restaurant/food-category/fo
 import { DishComponent } from 'src/app/pages/restaurant/dish/dish.component';
 import { CustomersOrderComponent } from 'src/app/pages/restaurant/customers-order/customers-order.component';
 import { RestaurantDishComponent } from 'src/app/pages/restaurant/restaurant-dish/restaurant-dish.component';
+import { CheckoutComponent } from 'src/app/pages/restaurant/customers-order/checkout/checkout.component';
 
 export const AdminLayoutRoutes: Routes = [
     {
@@ -27,7 +28,8 @@ export const AdminLayoutRoutes: Routes = [
             { path: 'food-category', component: FoodCategoryComponent },
             { path: 'dish', component: DishComponent },
             { path: 'customer-order', component: CustomersOrderComponent },
-            { path: 'restaurant-dish', component: RestaurantDishComponent }
+            { path: 'restaurant-dish', component: RestaurantDishComponent },
+            { path: 'checkout', component: CheckoutComponent }
         ]
     }
 ];

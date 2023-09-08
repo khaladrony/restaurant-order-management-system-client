@@ -24,7 +24,8 @@ export const ROUTES: RouteInfo[] = [
   { path: '/admin/food-category', title: 'Food Category', icon: 'ni-chart-pie-35 text-default', type: 'link', isCollapsed: false, children: [] },
   { path: '/admin/dish', title: 'Dish', icon: 'ni-palette text-danger', type: 'link', isCollapsed: false, children: [] },
   // { path: '/admin/customer-order', title: 'Order', icon: 'ni-cart text-success', type: 'link', isCollapsed: false, children: [] },
-  { path: '/admin/restaurant-dish', title: 'Restaurant Dish', icon: 'ni-cart text-success', type: 'link', isCollapsed: false, children: [] }
+  { path: '/admin/restaurant-dish', title: 'Restaurant Dish', icon: 'ni-cart text-success', type: 'link', isCollapsed: false, children: [] },
+  // { path: '/admin/checkout', title: 'Checkout', icon: 'ni-cart text-success', type: 'link', isCollapsed: false, children: [] }
   
 ];
 
@@ -38,7 +39,8 @@ export const ALLROUTES: any[] = [
   { path: '/admin/food-category', title: 'Food Category'},
   { path: '/admin/dish', title: 'Dish'},
   { path: '/admin/customer-order', title: 'Order'},
-  { path: '/admin/restaurant-dish', title: 'Restaurant Dish'}
+  { path: '/admin/restaurant-dish', title: 'Restaurant Dish'},
+  // { path: '/admin/checkout', title: 'Checkout'}
 ]
 
 @Component({

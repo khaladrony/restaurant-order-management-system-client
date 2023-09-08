@@ -47,5 +47,14 @@ h6 {
     border-radius: 3px !important;
 }
 
+.table td, .table th {
+    font-size: 0.8125rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+
 
 

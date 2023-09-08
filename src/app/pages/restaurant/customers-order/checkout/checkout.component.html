@@ -1,0 +1,312 @@
+<app-header></app-header>
+
+<header class="section-header">
+
+
+
+
+    <section class="section-content padding-y bg">
+        <div class="container">
+
+
+
+            <!-- ============================ COMPONENT 2 ================================= -->
+            <div class="row">
+                <div class="col-md-8">
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Review cart</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 5%;">SL</th>
+                                            <th>Product</th>
+                                            <th>Image</th>
+                                            <th>Description</th>
+                                            <th>Price</th>
+                                            <th>Qty</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of products; let i = index">
+                                            <td>{{i+1}}</td>
+                                            <td>{{item.title}}</td>
+                                            <td><img style="width: 50px;" src="{{item.image}}" alt=""></td>
+                                            <td data-toggle="tooltip" data-placement="top" style="width: 12%;">
+                                                {{item.description}}</td>
+                                            <td style="width: 12%;">{{item.price}}</td>
+                                            <td style="width: 12%;">{{item.quantity}}</td>
+                                            <td style="width: 12%;">{{item.total}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="8"></td>
+                                            <!-- <td><button (click)="emptycart()" class="btn btn-danger">Empty Cart</button></td>
+                                        <td><button routerLink="/product" class="btn btn-primary">Shop More</button></td>
+                                        <td><button (click)="checkout()" class="btn btn-success">Checkout</button></td>
+                                        <td><strong>Grand Total : ${{grandTotal}}</strong></td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- card-body.// -->
+                    </article> <!-- card.// -->
+
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Contact info</h4>
+                            <form action="">
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <label>Frst name</label>
+                                        <input type="text" placeholder="Type here" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Last name</label>
+                                        <input type="text" placeholder="Type here" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Phone</label>
+                                        <input type="text" value="+998" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Email</label>
+                                        <input type="email" placeholder="example@gmail.com" class="form-control">
+                                    </div>
+                                </div> <!-- row.// -->
+                            </form>
+                        </div> <!-- card-body.// -->
+                    </article> <!-- card.// -->
+
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Delivery info</h4>
+                            <form action="">
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <label class="js-check box active">
+                                            <input type="radio" name="dostavka" value="option1" checked="">
+                                            <h6 class="title">Delivery</h6>
+                                            <p class="text-muted">We will deliver by DHL Kargo</p>
+                                        </label> <!-- js-check.// -->
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label class="js-check box">
+                                            <input type="radio" name="dostavka" value="option1">
+                                            <h6 class="title">Pick-up</h6>
+                                            <p class="text-muted">Come to our office to somewhere </p>
+                                        </label> <!-- js-check.// -->
+                                    </div>
+                                </div> <!-- row.// -->
+
+
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <label>City*</label>
+                                        <select name="" class="form-control">
+                                            <option value="">Tashkent</option>
+                                            <option value="">Buxoro</option>
+                                            <option value="">Samarqand</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Area*</label>
+                                        <input type="text" placeholder="Type here" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-8">
+                                        <label>Street*</label>
+                                        <input type="text" placeholder="Type here" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Building</label>
+                                        <input type="text" placeholder="" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>House</label>
+                                        <input type="text" placeholder="Type here" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Postal code</label>
+                                        <input type="text" placeholder="" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Zip</label>
+                                        <input type="text" placeholder="" class="form-control">
+                                    </div>
+                                </div> <!-- row.// -->
+                            </form>
+                        </div> <!-- card-body.// -->
+                    </article> <!-- card.// -->
+
+
+                    <div class="accordion" id="accordion_pay">
+
+
+                        <div class="card">
+                            <div class="card-header">
+                                <img src="assets/img/misc/payment-card.png" class="float-right" height="24">
+                                <a class="accordion-button" data-bs-toggle="collapse" data-bs-target="#pay_payme">
+                                    <input class="form-check-input" name="payment-option" type="radio" value="CC"
+                                        checked="" (change)="changePayType($event)">
+                                    <h6 class="form-check-label"> Credit Card </h6>
+                                </a>
+                            </div>
+                            <div id="pay_payme" [ngClass]="{collapseStatus}" data-bs-parent="#accordion_pay">
+                                <div class="card-body">
+                                    <p class="alert alert-success">Some information or instruction</p>
+                                    <form class="form-inline">
+                                        <input type="text" class="form-control mr-2" placeholder="xxxx-xxxx-xxxx-xxxx"
+                                            name="">
+                                        <input type="text" class="form-control mr-2" style="width: 100px"
+                                            placeholder="dd/yy" name="">
+                                        <input type="number" maxlength="3" class="form-control mr-2"
+                                            style="width: 100px" placeholder="cvc" name="">
+                                        <button class="btn btn btn-success">Button</button>
+                                    </form>
+                                </div> <!-- card body .// -->
+                            </div> <!-- collapse .// -->
+                        </div> <!-- card.// -->
+
+
+                        <div class="card">
+                            <div class="card-header">
+                                <img src="assets/img/misc/payment-bank.png" class="float-right" height="24">
+                                <a class="accordion-button" data-bs-toggle="collapse" data-bs-target="#pay_card">
+                                    <input class="form-check-input" name="payment-option" type="radio" value="BT"
+                                        (change)="changePayType($event)">
+                                    <h6 class="form-check-label"> Bank Transfer </h6>
+                                </a>
+                            </div>
+                            <div id="pay_card" [ngClass]="{collapseStatus}" data-bs-parent="#accordion_pay">
+                                <div class="card-body">
+                                    <p class="text-muted">Some instructions about how to pay </p>
+                                    <p>
+                                        Brac Bank, Account number: 12345678912346 <br>
+                                        IBAN: 12345, SWIFT: 987654
+                                    </p>
+                                </div> <!-- card body .// -->
+                            </div> <!-- collapse .// -->
+                        </div> <!-- card.// -->
+                    </div>
+                    <!-- accordion end.// -->
+
+
+                </div> <!-- col.// -->
+                <aside class="col-md-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h4 class="mb-3">Overview</h4>
+                            <dl class="dlist-align">
+                                <dt class="text-muted">Delivery:</dt>
+                                <dd>Pick-up</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                                <dt class="text-muted">Delivery type:</dt>
+                                <dd>Standart</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                                <dt class="text-muted">Payment method:</dt>
+                                <dd>Cash</dd>
+                            </dl>
+                            <hr>
+                            <dl class="dlist-align">
+                                <dt>Total:</dt>
+                                <dd class="h5">{{grandTotal}}</dd>
+                            </dl>
+                            <hr>
+                            <p class="small mb-3 text-muted">By clicking you are agree with terms of condition </p>
+                            <a href="#" class="btn btn-primary btn-block"> Button </a>
+
+                        </div> <!-- card-body.// -->
+                    </div> <!-- card.// -->
+                </aside> <!-- col.// -->
+            </div> <!-- row.// -->
+
+            <!-- ============================ COMPONENT 2 END//  ================================= -->
+
+
+
+
+
+
+
+
+
+
+
+        </div> <!-- container .//  -->
+    </section>
+
+
+    <h4>All closed</h4>
+    <div class="accordion" id="accordionWithRadioExample">
+        <div class="card">
+            <div class="card-header">
+                <div class="custom-control custom-radio">
+                    <input data-toggle="collapse" data-target="#collapseOne" type="radio" id="customRadio1"
+                        name="customRadio" class="custom-control-input" />
+                    <label class="custom-control-label" for="customRadio1">Collapse 1</label>
+                </div>
+            </div>
+
+            <div id="collapseOne" class="collapse" data-parent="#accordionWithRadioExample">
+                <div class="card-body">
+                    // Collapse 1 content
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="custom-control custom-radio">
+                    <input data-toggle="collapse" data-target="#collapseTwo" type="radio" id="customRadio2"
+                        name="customRadio" class="custom-control-input" />
+                    <label class="custom-control-label" for="customRadio2">Collapse 2</label>
+                </div>
+            </div>
+            <div id="collapseTwo" class="collapse" data-parent="#accordionWithRadioExample">
+                <div class="card-body">
+                    // Collapse 2 content
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <h4>Pre-checked</h4>
+    <div class="accordion" id="accordionWithRadioExample_PreChecked">
+        <div class="card">
+            <div class="card-header">
+                <div class="custom-control custom-radio">
+                    <input checked="" data-toggle="collapse" data-target="#collapseOne_PreChecked" type="radio"
+                        id="customRadio1_PreChecked" name="customRadio2" class="custom-control-input" />
+                    <label class="custom-control-label" for="customRadio1_PreChecked">Collapse 1</label>
+                </div>
+            </div>
+
+            <div id="collapseOne_PreChecked" class="collapse show" data-parent="#accordionWithRadioExample_PreChecked">
+                <div class="card-body">
+                    // Pre-checked collapse 1 content
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="custom-control custom-radio">
+                    <input data-toggle="collapse" data-target="#collapseTwo_PreChecked" type="radio"
+                        id="customRadio2_PreChecked" name="customRadio2" class="custom-control-input" />
+                    <label class="custom-control-label" for="customRadio2_PreChecked">Collapse 2</label>
+                </div>
+            </div>
+            <div id="collapseTwo_PreChecked" class="collapse" data-parent="#accordionWithRadioExample_PreChecked">
+                <div class="card-body">
+                    // Pre-checked collapse 2 content
+                </div>
+            </div>
+        </div>
